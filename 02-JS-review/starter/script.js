@@ -148,22 +148,22 @@ const books = getBooks();
 
 // Array Map Method
 const titles = books.map((book) => book.title);
-console.log(titles);
+titles;
 
 const titlesAuthor = books.map((book) => ({
   title: book.title,
   author: book.author,
 }));
-console.log(titlesAuthor);
+titlesAuthor;
 
 // Filter Method
 const longBooks = books
   .filter((book) => book.pages >= 500)
   .filter((book) => book.hasMovieAdaptation);
-console.log(longBooks);
+longBooks;
 
 const sciFi = books.filter((book) => book.genres.includes("science fiction"));
-console.log(sciFi);
+sciFi;
 
 // Reduce Method
 const pagesAllBooks = books.reduce((acc, book) => acc + book.pages, 0);
@@ -187,3 +187,44 @@ x;
 
 const sortedByPages = books.slice().sort((a, b) => b.pages - a.pages);
 sortedByPages;
+
+// add book object to array
+const newBook = {
+  id: 6,
+  title: "Baru Cormorant: The Masquerade",
+  author: "Seth Dickinson",
+};
+const booksAfterAdd = [...books, newBook];
+
+// Delete book object from array
+// new to always create copies of arrays, but these would be hidden away under getter setter style methods.
+const booksAfterDelete = books.filter((book) => book.id !== 3);
+booksAfterDelete;
+
+// Update obj in array
+const booksAfterUpdate = booksAfterDelete.map((book) =>
+  // Spread book and overwrite a given property. Map in method which takes in key and value as well
+  book.id === 1 ? { ...book, pages: 98798878 } : book
+);
+
+booksAfterUpdate;
+
+// Async vs Await
+// this will return a Promise obj, pending, error, or fufilled
+// fetch("https://jsonplaceholder.typicode.com/todos")
+//   .then((response) => response.json())
+//   .then((json) => console.log(json));
+// console.log("GH");
+
+async function getTodos() {
+  const res = await fetch("https://jsonplaceholder.typicode.com/todos");
+  const data = await res.json();
+  console.log(data);
+
+  return data;
+}
+
+const todos = getTodos(); // this will return a promise bc of async?!
+// but this is normally a bad set up, and we set a var after the await in the mthods
+console.log(todos);
+todos;
