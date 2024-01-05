@@ -66,7 +66,7 @@ const data = [
     publicationDate: "1965-01-01",
     author: "Frank Herbert",
     genres: ["science fiction", "novel", "adventure"],
-    hasMovieAdaptation: true,
+    hasMovieAdaptation: false,
     pages: 658,
     translations: {
       spanish: "",
@@ -142,3 +142,48 @@ function getBooks() {
 function getBook(id) {
   return data.find((d) => d.id === id);
 }
+
+// Destructuring
+const books = getBooks();
+
+// Array Map Method
+const titles = books.map((book) => book.title);
+console.log(titles);
+
+const titlesAuthor = books.map((book) => ({
+  title: book.title,
+  author: book.author,
+}));
+console.log(titlesAuthor);
+
+// Filter Method
+const longBooks = books
+  .filter((book) => book.pages >= 500)
+  .filter((book) => book.hasMovieAdaptation);
+console.log(longBooks);
+
+const sciFi = books.filter((book) => book.genres.includes("science fiction"));
+console.log(sciFi);
+
+// Reduce Method
+const pagesAllBooks = books.reduce((acc, book) => acc + book.pages, 0);
+pagesAllBooks;
+
+// note, push returns new length, not new array. use return to be explicit. dont need to return the acc, though that is the default.
+const titless = books.reduce((acc, book) => {
+  acc.push(book.title);
+  return acc;
+}, []);
+titles;
+
+// Sort is a mutation method. This can be bad with react which does not want us to mutuate data
+const x = [1, 2, 3, 6, 4];
+// const sorted = x.sort((a, b) => a - b);
+
+// creat copy of array
+const sortedNew = x.slice().sort((a, b) => a - b);
+sortedNew;
+x;
+
+const sortedByPages = books.slice().sort((a, b) => b.pages - a.pages);
+sortedByPages;
