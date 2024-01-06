@@ -13,19 +13,6 @@ function App() {
   );
 }
 
-function Pizza(props) {
-  return (
-    <div className="pizza">
-      <img src={props.photo} alt={props.name} />
-      <div>
-        <h3>{props.name}</h3>
-        <p>{props.ingredients}</p>
-        <span>{props.price + 3}</span>
-      </div>
-    </div>
-  );
-}
-
 function Header() {
   // This works, but for larger projects, we will manage this via style sheets and styled componend.
   // const style = {
@@ -42,22 +29,30 @@ function Header() {
   );
 }
 
+function Pizza(props) {
+  return (
+    <div className="pizza">
+      <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
+      <div>
+        <h3>{props.pizzaObj.name}</h3>
+        <p>{props.pizzaObj.ingredients}</p>
+        <span>{props.pizzaObj.price}</span>
+      </div>
+    </div>
+  );
+}
+
 function Menu() {
   return (
     <main className="menu">
       <h2>Our Menu</h2>
-      <Pizza
-        name="Pizza Spinaci"
-        ingredients="Ingredients here...."
-        photo="pizzas/spinaci.jpg"
-        price={10}
-      />
-      <Pizza
-        name="Pizza Fungi"
-        ingredients="Mushrooooom"
-        photo="pizzas/funghi.jpg"
-        price={11}
-      />
+
+      <ul className="pizzas">
+        {pizzaData.map((pizza) => (
+          // Unique key is needed by react for performance benefits.
+          <Pizza pizzaObj={pizza} key={pizza.name} />
+        ))}
+      </ul>
     </main>
   );
 }
