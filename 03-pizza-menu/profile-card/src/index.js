@@ -30,24 +30,57 @@ function Intro(props) {
   );
 }
 
+function levelToEmoji(level) {
+  const emojiDict = {
+    beginner: " 🙂",
+    intermediate: " 😄",
+    advanced: " 🥳",
+  };
+
+  return emojiDict[level];
+}
+
 function Skillset(props) {
+  const skillList = [
+    { skill: "Python", level: "advanced", color: "green" },
+    { skill: "Git/Github", level: "advanced", color: "green" },
+    { skill: "JavaScript", level: "intermediate", color: "green" },
+    { skill: "TypeScript", level: "intermediate", color: "green" },
+    { skill: "React", level: "beginner", color: "green" },
+    { skill: "HTML/CSS", level: "beginner", color: "green" },
+  ];
+
   return (
-    <div className="skill-list">
-      <Skill skillName="Python" emoji="🤩" color="green" />
-      <Skill skillName="Git/Github" emoji="🤩" color="green" />
-      <Skill skillName="JavaScript" emoji="😄" color="green" />
-      <Skill skillName="TypeScript" emoji="🙂" color="green" />
-      <Skill skillName="React" emoji="🙂" color="green" />
-      <Skill skillName="HTML/CSS" emoji="🙂" color="green" />
+    <ul className="skill-list">
+      {skillList.map((skill) => (
+        // <Skill skillObj={skill} key={skill.name} />
+        <SkillAlt
+          skill={skill.skill}
+          color={skill.color}
+          level={skill.level}
+          key={skill.name}
+        />
+      ))}
+    </ul>
+  );
+}
+
+function Skill({ skillObj }) {
+  return (
+    <div className="skill" style={{ backgroundColor: skillObj.color }}>
+      {skillObj.skill}
+      {levelToEmoji(skillObj.level)}
     </div>
   );
 }
 
-function Skill(props) {
+function SkillAlt({ skill, color, level }) {
   return (
-    <div className="skill" style={{ backgroundColor: props.color }}>
-      {props.skillName}
-      {props.emoji}
+    <div className="skill" style={{ backgroundColor: color }}>
+      {skill}
+      {level === "beginner" && " 🙂"}
+      {level === "intermediate" && " 😄"}
+      {level === "advanced" && " 🥳"}
     </div>
   );
 }

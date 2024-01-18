@@ -24,35 +24,53 @@ function Header() {
 
   return (
     <header className="header">
-      <h1>Fast React Pizza Co.</h1>
+      <h1> ast React Pizza Co.</h1>
     </header>
   );
 }
 
-function Pizza(props) {
+// Destructured props.
+function Pizza({ pizzaObj }) {
+  // if (pizzaObj.soldOut) return null;
+
   return (
-    <div className="pizza">
-      <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
+    <div className={`pizza ${pizzaObj.soldOut ? "sold-out" : ""}`}>
+      <img src={pizzaObj.photoName} alt={pizzaObj.name} />
       <div>
-        <h3>{props.pizzaObj.name}</h3>
-        <p>{props.pizzaObj.ingredients}</p>
-        <span>{props.pizzaObj.price}</span>
+        <h3>{pizzaObj.name}</h3>
+        <p>{pizzaObj.ingredients}</p>
+        <span>{pizzaObj.soldOut ? "SOLD OUT" : pizzaObj.price}</span>
       </div>
     </div>
   );
 }
 
 function Menu() {
+  const pizzas = pizzaData;
+  const isPizzas = pizzas.length > 0;
+
   return (
     <main className="menu">
       <h2>Our Menu</h2>
 
-      <ul className="pizzas">
-        {pizzaData.map((pizza) => (
-          // Unique key is needed by react for performance benefits.
-          <Pizza pizzaObj={pizza} key={pizza.name} />
-        ))}
-      </ul>
+      {isPizzas ? (
+        // Need a react fragment to fix the DOM Tree. Use just brackets rather than a div.
+        // To make a fragment with a key, we write it as <React.Fragment ket="blah"></React.Fragment>.
+        // Fragments allow us to return multiple components to the DOM tree, rather than a single component (i.e. Div).
+        <>
+          <p>
+            Authentic Italian Cuisine. Brick Oven Pizzas. All Organic, All
+            Delicious.
+          </p>
+          <ul className="pizzas">
+            {pizzas.map((pizza) => (
+              <Pizza pizzaObj={pizza} key={pizza.name} />
+            ))}
+          </ul>
+        </>
+      ) : (
+        <p>Sorry, we're out of pizza!</p>
+      )}
     </main>
   );
 }
@@ -60,34 +78,45 @@ function Menu() {
 function Footer() {
   const hour = new Date().getHours();
   const openHour = 12;
-  const closedHour = 22;
-  const isOpen = openHour <= hour && hour < closedHour;
+  const closeHour = 22;
+  const isOpen = openHour <= hour && hour < closeHour;
 
-  const res = isOpen ? (
+  return (
     <footer className="footer">
-      {new Date().toLocaleTimeString()}. We're currently open!
+      {isOpen ? (
+        <Open openHour={openHour} closeHour={closeHour} />
+      ) : (
+        <Closed openHour={openHour} />
+      )}
     </footer>
-  ) : (
-    <footer>{new Date().toLocaleTimeString()}. We're currently closed!</footer>
   );
-
-  return res;
-
-  // return React.createElement("footer", null, "We're currently open!");
 }
 
+function Open({ openHour, closeHour }) {
+  return (
+    <div className="order">
+      <p>
+        We're open from {openHour}:00 until {closeHour}:00. Come visit us or
+        order online.
+      </p>
+      <button className="btn"> Order Online</button>
+    </div>
+  );
+}
+
+function Closed(props) {
+  return <p>We're closed. We open at {props.openHour}:00.</p>;
+}
+
+// Render the application.
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  // StrictMode renders components twice to find bugs. Generally always use.
   <React.StrictMode>
     <App />
   </React.StrictMode>
 );
 
-// Component Tree to Explain Relationships
-// Component As Function, Return Markup for React
-
-// Pizzas
+// Pizza Data
 const pizzaData = [
   {
     name: "Focaccia",
